@@ -9,7 +9,7 @@ import { registerV1Routes } from '@backend/api/v1/routes';
 export async function buildApp() {
   const app = Fastify({
     loggerInstance: logger,
-    genReqId: (request: { headers: Record<string, string | string[] | undefined> }) => generateRequestId(request.headers['x-request-id']),
+    genReqId: (request) => generateRequestId(request.headers['x-request-id']),
   });
 
   const container = createContainer();
