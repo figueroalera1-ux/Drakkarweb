@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+      target: runner
+    env_file:
+      - .env.example
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: drakkar
+      POSTGRES_USER: drakkar
+      POSTGRES_PASSWORD: drakkar
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
