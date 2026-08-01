@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import type { FastifyBaseLogger } from 'fastify';
 import { createContainer } from '@backend/container';
 import { registerErrorHandler } from '@backend/errors/error-handler';
 import { logger } from '@backend/logger';
@@ -8,7 +9,7 @@ import { registerV1Routes } from '@backend/api/v1/routes';
 
 export async function buildApp() {
   const app = Fastify({
-    loggerInstance: logger,
+    loggerInstance: logger as FastifyBaseLogger,
     genReqId: (request) => generateRequestId(request.headers['x-request-id']),
   });
 
