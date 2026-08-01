@@ -6,6 +6,7 @@ import { logger } from '@backend/logger';
 import { registerMiddleware } from '@backend/middleware';
 import { generateRequestId } from '@backend/middleware/request-id';
 import { registerV1Routes } from '@backend/api/v1/routes';
+import { registerCrmRoutes } from '@backend/crm/routes';
 
 export async function buildApp() {
   const app = Fastify({
@@ -17,6 +18,7 @@ export async function buildApp() {
 
   await registerMiddleware(app);
   await registerV1Routes(app, container.controllers);
+  await app.register((crm) => registerCrmRoutes(crm, container.prisma), { prefix: '/api/v1' });
   registerErrorHandler(app);
 
   app.addHook('onClose', async () => {

@@ -92,6 +92,65 @@ enum MediaType {
   OTHER
 }
 
+enum CompanyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CrmLeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+}
+
+model Company {
+  id             String        @id @default(uuid()) @db.Uuid
+  businessName   String        @map("business_name")
+  commercialName String?       @map("commercial_name")
+  taxId           String?       @unique @map("tax_id")
+  phone           String?
+  email           String?
+  website         String?
+  address         String?
+  city            String?
+  state           String?
+  country         String        @default("México")
+  postalCode      String?       @map("postal_code")
+  notes           String?
+  status          CompanyStatus @default(ACTIVE)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  contacts        Contact[]
+  crmLeads        Lead[]
+
+  @@index([businessName])
+  @@map("companies")
+}
+
+model Contact {
+  id        String   @id @default(uuid()) @db.Uuid
+  companyId String   @map("company_id") @db.Uuid
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  phone     String?
+  mobile    String?
+  email     String?
+  position  String?
+  notes     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  crmLeads  Lead[]
+
+  @@index([companyId])
+  @@map("contacts")
+}
+
 model User {
   id        String     @id @default(uuid()) @db.Uuid
   email     String     @unique
@@ -321,12 +380,21 @@ model Lead {
   temperature    LeadTemperature?
   message        String?
   lostReason     String?         @map("lost_reason")
+  companyId      String?         @map("company_id") @db.Uuid
+  contactId      String?         @map("contact_id") @db.Uuid
+  crmStatus      CrmLeadStatus   @default(NEW) @map("crm_status")
+  pipelineStage  String          @default("NEW") @map("pipeline_stage")
+  estimatedValue Decimal?        @map("estimated_value") @db.Decimal(12, 2)
+  probability    Int             @default(0)
+  crmNotes       String?         @map("crm_notes_text")
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
   deletedAt      DateTime?       @map("deleted_at")
 
   assignedUser User?         @relation("LeadAssignedUser", fields: [assignedUserId], references: [id])
   client       Client?       @relation(fields: [clientId], references: [id])
+  company      Company?      @relation(fields: [companyId], references: [id])
+  contact      Contact?      @relation(fields: [contactId], references: [id])
   pipeline     CrmPipeline[]
   notes        Note[]
   tasks        Task[]
@@ -334,6 +402,9 @@ model Lead {
 
   @@index([assignedUserId])
   @@index([status])
+  @@index([companyId])
+  @@index([contactId])
+  @@index([crmStatus])
   @@map("leads")
 }
 

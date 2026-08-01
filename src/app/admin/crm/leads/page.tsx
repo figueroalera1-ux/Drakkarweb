@@ -1,0 +1,2 @@
+import { CrmPage } from '@frontend/cms/components/crm/crm-page';
+export default function Page(){return <CrmPage resource="leads" title="Leads" columns={[{key:'source',header:'Origen'},{key:'crmStatus',header:'Estado'},{key:'pipelineStage',header:'Etapa'},{key:'estimatedValue',header:'Valor'}]} fields={[{name:'companyId',label:'ID empresa',input:'text'},{name:'contactId',label:'ID contacto',input:'text'},{name:'source',label:'Origen',input:'text'},{name:'pipelineStage',label:'Etapa',input:'text'},{name:'estimatedValue',label:'Valor estimado',input:'number'}]}/>}
