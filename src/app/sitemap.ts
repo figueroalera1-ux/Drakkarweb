@@ -1,0 +1,1 @@
+import type {MetadataRoute} from 'next';import {products} from '@frontend/site/content';export default function sitemap():MetadataRoute.Sitemap{const base='https://tiendasdrakkar.mx';return['','/catalogo','/categorias','/nosotros','/preguntas-frecuentes','/contacto',...products.map(p=>`/producto/${p.slug}`)].map(url=>({url:base+url,lastModified:new Date()}))}

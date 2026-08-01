@@ -1,15 +1,3 @@
-import type { Metadata } from 'next';
-import '@frontend/styles/globals.css';
-
-export const metadata: Metadata = {
-  title: 'Tiendas Drakkar',
-  description: 'Plataforma comercial de Tiendas Drakkar.',
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="es-MX">
-      <body>{children}</body>
-    </html>
-  );
-}
+import type { Metadata } from 'next'; import '@frontend/styles/globals.css'; import {Header,Footer} from '@frontend/site/components';
+export const metadata:Metadata={title:{default:'Tiendas Drakkar | Muebles contemporáneos',template:'%s | Tiendas Drakkar'},description:'Muebles contemporáneos de calidad. Salas, comedores y recámaras con atención personalizada.',openGraph:{title:'Tiendas Drakkar',description:'Diseño y confort para tu hogar.',type:'website',locale:'es_MX'}};
+export default function RootLayout({children}:Readonly<{children:React.ReactNode}>){return <html lang="es-MX"><body><Header/>{children}<Footer/></body></html>}
