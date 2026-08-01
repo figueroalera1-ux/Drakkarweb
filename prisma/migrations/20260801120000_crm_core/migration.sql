@@ -1,0 +1,8 @@
+CREATE TYPE "CompanyStatus" AS ENUM ('ACTIVE', 'INACTIVE');
+CREATE TYPE "CrmLeadStatus" AS ENUM ('NEW', 'CONTACTED', 'QUALIFIED', 'PROPOSAL', 'NEGOTIATION', 'WON', 'LOST');
+CREATE TABLE companies (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), business_name TEXT NOT NULL, commercial_name TEXT, tax_id TEXT UNIQUE, phone TEXT, email TEXT, website TEXT, address TEXT, city TEXT, state TEXT, country TEXT NOT NULL DEFAULT 'México', postal_code TEXT, notes TEXT, status "CompanyStatus" NOT NULL DEFAULT 'ACTIVE', created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX companies_business_name_idx ON companies(business_name);
+CREATE TABLE contacts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE, first_name TEXT NOT NULL, last_name TEXT NOT NULL, phone TEXT, mobile TEXT, email TEXT, position TEXT, notes TEXT, active BOOLEAN NOT NULL DEFAULT true, created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX contacts_company_id_idx ON contacts(company_id);
+ALTER TABLE leads ADD COLUMN company_id UUID REFERENCES companies(id), ADD COLUMN contact_id UUID REFERENCES contacts(id), ADD COLUMN crm_status "CrmLeadStatus" NOT NULL DEFAULT 'NEW', ADD COLUMN pipeline_stage TEXT NOT NULL DEFAULT 'NEW', ADD COLUMN estimated_value DECIMAL(12,2), ADD COLUMN probability INTEGER NOT NULL DEFAULT 0, ADD COLUMN crm_notes_text TEXT;
+CREATE INDEX leads_company_id_idx ON leads(company_id); CREATE INDEX leads_contact_id_idx ON leads(contact_id); CREATE INDEX leads_crm_status_idx ON leads(crm_status);

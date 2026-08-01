@@ -1,0 +1,3 @@
+import type { FastifyInstance } from 'fastify';
+import { CrmController } from './controller'; import { CrmRepository } from './repository'; import { CrmService } from './service'; import type { PrismaClient } from '@prisma/client';
+export async function registerCrmRoutes(app: FastifyInstance, prisma: PrismaClient) { const controller=new CrmController(new CrmService(new CrmRepository(prisma))); app.get('/crm/dashboard',controller.dashboard); app.get('/crm/:kind',controller.list); app.post('/crm/:kind',controller.create); app.patch('/crm/:kind/:id',controller.update); app.delete('/crm/:kind/:id',controller.remove); }
