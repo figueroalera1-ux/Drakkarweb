@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import type { DomainControllers } from '../controllers/domain-controllers';
 import { idParamsSchema } from '@backend/validation/common';
+import type { IdParams } from '@backend/validation/common';
 import { validateRequest } from '@backend/validation/request';
 
 const routeMap = [
@@ -30,6 +31,10 @@ const routeMap = [
 
 export async function registerDomainRoutes(app: FastifyInstance, controllers: DomainControllers) {
   for (const [path, controllerKey] of routeMap) {
-    app.get(`/${path}/:id`, { preHandler: validateRequest({ params: idParamsSchema }) }, controllers[controllerKey].getById);
+    app.get<{ Params: IdParams }>(
+      `/${path}/:id`,
+      { preHandler: validateRequest({ params: idParamsSchema }) },
+      controllers[controllerKey].getById,
+    );
   }
 }
