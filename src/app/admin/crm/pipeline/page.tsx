@@ -1,0 +1,1 @@
+export default function Page(){const stages=['NEW','CONTACTED','QUALIFIED','PROPOSAL','NEGOTIATION','WON','LOST'];return <section><h1 className="text-2xl font-bold">Pipeline</h1><div className="mt-6 grid grid-cols-7 gap-3">{stages.map((stage)=><div key={stage} className="min-h-64 rounded border p-3"><h2 className="font-semibold">{stage}</h2></div>)}</div></section>}

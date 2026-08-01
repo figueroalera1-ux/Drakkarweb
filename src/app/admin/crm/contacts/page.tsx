@@ -1,0 +1,2 @@
+import { CrmPage } from '@frontend/cms/components/crm/crm-page';
+export default function Page(){return <CrmPage resource="contacts" title="Contactos" columns={[{key:'firstName',header:'Nombre'},{key:'lastName',header:'Apellido'},{key:'email',header:'Email'},{key:'position',header:'Puesto'}]} fields={[{name:'companyId',label:'ID empresa',input:'text',required:true},{name:'firstName',label:'Nombre',input:'text',required:true},{name:'lastName',label:'Apellido',input:'text',required:true},{name:'email',label:'Email',input:'text'},{name:'mobile',label:'Móvil',input:'text'}]}/>}
